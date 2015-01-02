@@ -8,6 +8,7 @@ using Quobject.EngineIoClientDotNet.Thread;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 
 namespace Quobject.EngineIoClientDotNet.Client
@@ -111,7 +112,7 @@ namespace Quobject.EngineIoClientDotNet.Client
         {
             if (uri.StartsWith("http") || uri.StartsWith("ws"))
             {
-                return new Uri(uri);
+				return new Uri (uri);
             }
             else
             {
@@ -142,14 +143,13 @@ namespace Quobject.EngineIoClientDotNet.Client
             Port = options.Port;
             Query = options.QueryString != null ? ParseQS.Decode(options.QueryString) : new Dictionary<string, string>();
 
-            if (options.Query != null)
+			if (options.Query != null)
             {
                 foreach (var item in options.Query)
                 {
                     Query.Add(item.Key,item.Value);
                 }
             }
-
 
             Upgrade = options.Upgrade;
             Path = (options.Path ?? "/engine.io").Replace("/$", "") + "/";
@@ -193,7 +193,7 @@ namespace Quobject.EngineIoClientDotNet.Client
 
         private Transport CreateTransport(string name)
         {
-            var query = new Dictionary<string, string>(Query);
+			var query = new Dictionary<string, string>(Query);
             query.Add("EIO", Parser.Parser.Protocol.ToString());
             query.Add("transport", name);
             if (Id != null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Quobject.EngineIoClientDotNet.Modules
 {
@@ -64,6 +65,10 @@ namespace Quobject.EngineIoClientDotNet.Modules
         public static Dictionary<string, string> Decode(string qs)
         {
             var qry = new Dictionary<string, string>();
+
+			if (qs.StartsWith ("?")) 
+				qs = qs.Substring(1);
+
             var pairs = qs.Split('&');
             for (int i = 0; i < pairs.Length; i++)
             {
