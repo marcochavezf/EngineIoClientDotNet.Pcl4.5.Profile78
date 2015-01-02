@@ -1,0 +1,16 @@
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/obj/Debug/.NETPortable,Version=v4.5,Profile=Profile78.AssemblyAttribute.cs
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/EngineIoClientDotNet.dll.mdb
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/EngineIoClientDotNet.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/obj/Debug/EngineIoClientDotNet.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/obj/Debug/EngineIoClientDotNet.dll.mdb
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/Newtonsoft.Json.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/SuperSocket.ClientEngine.Common.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/SuperSocket.ClientEngine.Core.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/SuperSocket.ClientEngine.Protocol.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/SuperSocket.ClientEngine.Proxy.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/System.Net.Http.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/System.Net.Http.Primitives.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/System.Net.Http.Extensions.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/Microsoft.Threading.Tasks.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/Microsoft.Threading.Tasks.Extensions.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet/Src/EngineIoClientDotNet.net45/bin/Debug/WebSocket4Net.MonoTouch.dll
