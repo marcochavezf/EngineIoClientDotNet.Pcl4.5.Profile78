@@ -2,6 +2,7 @@
 using Quobject.Collections.Immutable;
 using Quobject.EngineIoClientDotNet.Modules;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace Quobject.EngineIoClientDotNet.ComponentEmitter
 {
@@ -49,7 +50,7 @@ namespace Quobject.EngineIoClientDotNet.ComponentEmitter
         /// <param name="eventString">event name</param>
         /// <param name="fn"></param>
         /// <returns>a reference to this object</returns>
-        public Emitter On(string eventString, IListener fn)
+		public Emitter On(string eventString, IListener fn)
         {
             if (!this.callbacks.ContainsKey(eventString))
             {
@@ -63,6 +64,18 @@ namespace Quobject.EngineIoClientDotNet.ComponentEmitter
             return this;
         }
 
+		/// <summary>
+		///  Listens on the event.
+		/// </summary>
+		/// <param name="eventString">event name</param>
+		/// <param name="fn"></param>
+		/// <returns>a reference to this object</returns>
+		public Emitter On(string eventString, Action<object> fn)
+		{
+			var listener = new ListenerImpl(fn);
+			return this.On(eventString, listener);
+		}
+
         /// <summary>
         ///  Listens on the event.
         /// </summary>
@@ -74,19 +87,6 @@ namespace Quobject.EngineIoClientDotNet.ComponentEmitter
             var listener = new ListenerImpl(fn);
             return this.On(eventString, listener);
         }
-
-        /// <summary>
-        ///  Listens on the event.
-        /// </summary>
-        /// <param name="eventString">event name</param>
-        /// <param name="fn"></param>
-        /// <returns>a reference to this object</returns>
-        public Emitter On(string eventString, Action<object> fn)
-        {
-            var listener = new ListenerImpl(fn);
-            return this.On(eventString, listener);
-        }
-
 
         /// <summary>
         /// Adds a one time listener for the event.
@@ -258,8 +258,6 @@ namespace Quobject.EngineIoClientDotNet.ComponentEmitter
                 fn1();
             }
         }
-
-        
 
         public int CompareTo(IListener other)
         {

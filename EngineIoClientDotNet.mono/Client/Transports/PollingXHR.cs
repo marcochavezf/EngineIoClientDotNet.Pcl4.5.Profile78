@@ -265,7 +265,7 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 			private void PostRequest (LogManager log)
 			{
 				var log2 = LogManager.GetLogger (Global.CallerName ());
-				log.Info ("***** BeginGetRequestStream *****");
+				log.Info ("***** BeginGetRequestStream  *****");
 				/* Sending Data to Server. */
 				Xhr.BeginGetRequestStream (asynchResultReq =>  {
 					try {
@@ -342,7 +342,7 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 				Xhr.BeginGetResponse (asynchResultResp =>  {
 					try {
 						using (var res = Xhr.EndGetResponse (asynchResultResp)) {
-							log.Info ("Xhr.GetResponse ");
+
 							var responseHeaders = new Dictionary<string, string> ();
 							foreach (string key in res.Headers.AllKeys) {
 								string value = res.Headers [key];
@@ -351,8 +351,10 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 							OnResponseHeaders (responseHeaders);
 							var contentType = res.Headers ["Content-Type"];
 							using (var resStream = res.GetResponseStream ()) {
+
 								Debug.Assert (resStream != null, "resStream != null");
 								if (contentType.Equals ("application/octet-stream", StringComparison.OrdinalIgnoreCase)) {
+									log.Info ("it's equal ");
 									var buffer = new byte[16 * 1024];
 									using (var ms = new MemoryStream ()) {
 										int read;

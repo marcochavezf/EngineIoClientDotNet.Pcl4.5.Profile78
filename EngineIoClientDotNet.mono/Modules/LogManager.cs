@@ -10,9 +10,10 @@ namespace Quobject.EngineIoClientDotNet.Modules
         private string MyType;
         private static readonly LogManager EmptyLogger = new LogManager(null);
 
-        private static System.IO.Stream file;
+        //private static System.IO.Stream file;
 
 		public static bool Enabled = false;
+		//public static bool Enabled = true;
 
         #region Statics
 
@@ -86,7 +87,6 @@ namespace Quobject.EngineIoClientDotNet.Modules
             }
         
         }
-
 
         [Conditional("DEBUG")]
         internal void Error(Exception e)
