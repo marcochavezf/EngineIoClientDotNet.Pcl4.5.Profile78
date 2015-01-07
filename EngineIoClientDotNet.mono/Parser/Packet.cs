@@ -133,15 +133,16 @@ namespace Quobject.EngineIoClientDotNet.Parser
                 type = -1;
             }
 
-            try
-            {
-                data = UTF8.Decode(data);
-            }
-            catch (Exception)
-            {
+			// This is a json sent by a socket
+			if (type == 4) {
+				return new Packet(_packetsList[(byte) type], data.Substring(1));
+			}
 
-                return _err;
-            }
+			try {
+				data = UTF8.Decode (data);
+			} catch (Exception e) {
+				return _err;
+			}
 
             if (type < 0 || type >= _packetsList.Count)
             {
