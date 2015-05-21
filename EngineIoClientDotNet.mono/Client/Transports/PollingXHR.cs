@@ -1,15 +1,18 @@
-﻿
-
-
-using Quobject.EngineIoClientDotNet.ComponentEmitter;
+﻿using Quobject.EngineIoClientDotNet.ComponentEmitter;
 using Quobject.EngineIoClientDotNet.Modules;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 using System.Text;
+using Quobject.EngineIoClientDotNet.Thread;
+using System.Threading;
+using ModernHttpClient;
+using System.Net.Http;
+using System.Linq;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace Quobject.EngineIoClientDotNet.Client.Transports
 {
@@ -19,8 +22,7 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 
         public PollingXHR(Options options) : base(options)
         {
-            
-        }
+		}
 
         protected XHRRequest Request()
         {
@@ -37,7 +39,6 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
             }
             opts.Uri = Uri();
            
-
             XHRRequest req = new XHRRequest(opts);
 
             req.On(EVENT_REQUEST_HEADERS, new EventRequestHeadersListener(this)).
@@ -252,7 +253,9 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
             private string Uri;
             private byte[] Data;
             private string CookieHeaderValue;
-            private HttpWebRequest Xhr;
+			private static HttpClient Xhr;
+			private Timer _xhrRequestTimer;
+			private TimerCallback _xhrRequestAction;
 
             public XHRRequest(RequestOptions options)
             {
@@ -262,11 +265,226 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
                 CookieHeaderValue = options.CookieHeaderValue;
             }
 
+            public void Create()
+            {
+
+				var log = LogManager.GetLogger(Global.CallerName());
+
+				//_xhrRequestAction = delegate {
+				if (Xhr == null) {
+					log.Info(string.Format("Creating a new HttpClient"));
+					var nativeMessageHandler = new NativeMessageHandler ();
+					Xhr = new HttpClient (nativeMessageHandler);
+				}
+	            
+				log.Info(string.Format("xhr open {0}: {1}", Method, Uri));
+				if (Method == "POST") {
+					//Xhr.DefaultRequestHeaders.TransferEncodingChunked = true;
+					PostRequest (log);
+				} else {
+					//Xhr.DefaultRequestHeaders.TransferEncodingChunked = false;
+					GetRequest (log);
+				}
+
+				//};
+				//_xhrRequestTimer = new Timer(_xhrRequestAction, null, 1000); 
+
+				/*
+                try
+                {
+                    log.Info(string.Format("xhr open {0}: {1}", Method, Uri));
+					Xhr = new HttpClient(new NativeMessageHandler());
+
+                    Xhr = (HttpWebRequest) WebRequest.Create(Uri);
+                    Xhr.Method = Method;
+                    if (CookieHeaderValue != null)
+                    {
+						Xhr.Headers["Cookie"] = CookieHeaderValue;
+                        //Xhr.Headers.Add("Cookie", CookieHeaderValue);                        
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Error(e);
+                    OnError(e);
+                    return;
+                }
+
+				_xhrRequestAction = delegate {
+					if (Method == "POST") {
+						Xhr.ContentType = "application/octet-stream";
+						PostRequest (log);
+					} else {
+						Xhr.ContentType = "text/xml; encoding='utf-8'";
+						GetRequest (log);
+					}
+				};
+				_xhrRequestTimer = new Timer(_xhrRequestAction, null, 2500); 
+				*/
+            }
+
+			private HttpResponseMessage PostAsyncSafe(HttpClient client, string requestUri, HttpContent content, LogManager log)
+			{
+				return PerformActionSafe(() => (client.PostAsync(requestUri, content)).Result, log);
+			}
+
+			private HttpResponseMessage PerformActionSafe(Func<HttpResponseMessage> action, LogManager log)
+			{
+				try
+				{
+					return action();
+				}
+				catch (AggregateException aex)
+				{ 
+					log.Error ("PerformActionSafe PostAsyncSafe ", aex);
+					OnError (aex);
+
+					Exception firstException = null;
+					if (aex.InnerExceptions != null && aex.InnerExceptions.Any())
+					{
+						firstException = aex.InnerExceptions.First();
+
+						if (firstException.InnerException != null)
+							firstException = firstException.InnerException;
+					}
+
+					log.Error ("firstException ", firstException);
+
+					var response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+					{
+						Content =
+							new StringContent(firstException != null
+								? firstException.ToString()
+								: "Encountered an AggreggateException without any inner exceptions")
+						};
+
+					return null;
+				}
+			}
+
 			private void PostRequest (LogManager log)
 			{
 				var log2 = LogManager.GetLogger (Global.CallerName ());
-				log.Info ("***** BeginGetRequestStream  *****");
+				log.Info ("***** BeginPostRequestStream  *****");
 				/* Sending Data to Server. */
+
+				var cookieContainer = new CookieContainer();
+
+					if (CookieHeaderValue != null) {
+						//cookieContainer.SetCookies (new Uri (Uri), CookieHeaderValue);
+					}
+
+					/*
+					if (Method == "POST") {
+						Xhr.ContentType = "application/octet-stream";
+					} else {
+						Xhr.ContentType = "text/xml; encoding='utf-8'";
+					}
+					*/
+
+					var dataContent = new ByteArrayContent (Data);
+					dataContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream"); 
+
+					//using (HttpResponseMessage response = PostAsyncSafe (Xhr, Uri, dataContent, log)) {
+					//HttpResponseMessage response = Xhr.PostAsync (Uri, dataContent).Result;
+					//Xhr.PostAsync (Uri, dataContent).ContinueWith (requestTask => {
+					var formContent = new FormUrlEncodedContent(new[] 
+					{
+						new KeyValuePair<string, string>("", "")
+					});
+
+					HttpResponseMessage response = null;
+					try{
+						//response = Xhr.PostAsync(Uri, dataContent).Result;
+						var httpRequestMessage = new HttpRequestMessage (HttpMethod.Post, new Uri(Uri));
+						httpRequestMessage.Content = dataContent;
+						response = Xhr.SendAsync (httpRequestMessage,HttpCompletionOption.ResponseContentRead | HttpCompletionOption.ResponseHeadersRead).Result;
+					} catch (Exception e){
+						log.Error ("PostAsync", e);
+						log.Info (String.Format("response: {0}", response));
+						OnError (e);
+						return;
+					}
+					
+					/*
+						if (response == null) {
+							return;
+						}*/
+
+					try {
+						response.EnsureSuccessStatusCode ();
+					} catch (Exception e) {
+						log.Error ("EnsureSuccessStatusCode in POST call:", e);
+						OnError (e);
+					}
+
+
+					log.Info ("Xhr.PostResponse ");
+					/*
+					var responseHeaders = new Dictionary<string, string> ();
+					foreach (KeyValuePair<string, IEnumerable<string>> entry in response.Headers) {
+						var value = String.Join(", ", entry.Value.ToArray());
+						responseHeaders.Add (entry.Key, value);
+						log.Info (String.Format ("Response Headers; Key: {0}, Value: {1}", entry.Key, value));
+					}
+					OnResponseHeaders (responseHeaders);
+					*/
+					//string contentType = response.Headers ["Content-Type"];
+					//log.Info (String.Format("Content-Type: {0}", contentType));
+
+					HttpContent content = response.Content;
+					//string result =  content.ReadAsStringAsync();
+
+					string contentType = content.GetType ().FullName;
+					log.Info (String.Format ("Content-Type: {0}", contentType));
+
+					string a = content.ReadAsStringAsync ().Result;
+					log.Info (String.Format ("post result array: {0}", a));
+					OnData (a);
+
+					//});
+						/*
+							//using (var resStream = response.GetResponseStream ()) {
+							Debug.Assert (content != null, "resStream != null");
+								if (contentType.Equals ("application/octet-stream", StringComparison.OrdinalIgnoreCase)) {
+									
+								var a = content.ReadAsByteArrayAsync ();
+								log.Info (String.Format ("post result array: {0}", a));
+								OnData (a);
+									/*
+									var buffer = new byte[16 * 1024];
+									using (var ms = new MemoryStream ()) {
+										int read;
+										while ((read = resStream.Read (buffer, 0, buffer.Length)) > 0) {
+											ms.Write (buffer, 0, read);
+										}
+										var a = ms.ToArray ();
+										log.Info (String.Format ("post result array: {0}", a));
+										OnData (a);
+									}
+									*
+
+								} else {
+
+								var a = content.ReadAsStringAsync ();
+								log.Info (String.Format ("post result array: {0}", a));
+								OnData (a);
+
+									/*
+									using (var sr = new StreamReader (resStream)) {
+										var result = sr.ReadToEnd ();
+										log.Info (String.Format ("post esult: {0}", result));
+										OnData (result);
+									}*
+
+
+								}
+							//}
+							*/						
+					
+				
+
+				/*
 				Xhr.BeginGetRequestStream (asynchResultReq =>  {
 					try {
 						using (var requestStream = Xhr.EndGetRequestStream (asynchResultReq)) {
@@ -286,7 +504,7 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 
 					log.Info ("Task.Run Create start");
 
-					/* Requesting Response from Server. */
+					// Requesting Response from Server. 
 					Xhr.BeginGetResponse (asynchResultResp =>  {
 						try {
 							using (var res = Xhr.EndGetResponse (asynchResultResp)) {
@@ -331,14 +549,102 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 					}, null);
 					log2.Info ("Task.Run Create finish");
 				}, null);
+				*/
 			}
 
 
 			private void GetRequest (LogManager log)
 			{
-	
+
 				log.Info("***** BeginGet Response *****");
-					/* Requesting Response from Server. */
+				// Requesting Response from Server.
+
+					var cookieContainer = new CookieContainer();
+					//using (var Xhr = new HttpClient(new NativeMessageHandler(){ CookieContainer = cookieContainer, UseCookies = true }))
+					//{
+						//var request = new HttpRequestMessage(HttpMethod.Get, Uri);
+						//request.Content = new StringContent(Serialize(obj), Encoding.UTF8, "text/xml");
+						//var response =  Xhr.SendAsync(request);
+						//return  await response.Content.ReadAsStringAsync();
+
+						//Xhr.Timeout = TimeSpan.FromMinutes(10);
+
+						if (CookieHeaderValue != null)
+						{
+							//cookieContainer.SetCookies (new Uri(Uri), CookieHeaderValue);
+						}
+
+						HttpResponseMessage response = Xhr.GetAsync (Uri).Result;
+
+						try {
+							response.EnsureSuccessStatusCode ();
+						} catch (Exception e) {
+							log.Error ("EnsureSuccessStatusCode in GET call:", e);
+							OnError (e);
+						}
+
+						log.Info ("Xhr.GetResponse ");
+						var responseHeaders = new Dictionary<string, string> ();
+						foreach (KeyValuePair<string, IEnumerable<string>> entry in response.Headers) {
+							string value = entry.Value.SingleOrDefault<string> ();
+							responseHeaders.Add (entry.Key, value);
+							log.Info (String.Format ("Response Headers; Key: {0}, Value: {1}", entry.Key, value));
+						}
+						OnResponseHeaders (responseHeaders);
+
+
+						HttpContent content = response.Content;
+							//string result =  content.ReadAsStringAsync();
+
+								string contentType = content.GetType ().ToString();
+							log.Info (String.Format ("Content-Type: {0}", contentType));
+
+							string a = content.ReadAsStringAsync ().Result;
+							log.Info (String.Format ("get result array: {0}", a));
+							OnData (a);
+
+							/*
+						//using (var resStream = response.GetResponseStream ()) {
+						Debug.Assert (content != null, "resStream != null");
+						if (contentType.Equals ("application/octet-stream", StringComparison.OrdinalIgnoreCase)) {
+
+							var a = content.ReadAsByteArrayAsync ();
+							log.Info (String.Format ("post result array: {0}", a));
+							OnData (a);
+							/*
+									var buffer = new byte[16 * 1024];
+									using (var ms = new MemoryStream ()) {
+										int read;
+										while ((read = resStream.Read (buffer, 0, buffer.Length)) > 0) {
+											ms.Write (buffer, 0, read);
+										}
+										var a = ms.ToArray ();
+										log.Info (String.Format ("post result array: {0}", a));
+										OnData (a);
+									}
+									*
+
+						} else {
+
+							var a = content.ReadAsStringAsync ();
+							log.Info (String.Format ("post result array: {0}", a));
+							OnData (a);
+
+							/*
+									using (var sr = new StreamReader (resStream)) {
+										var result = sr.ReadToEnd ();
+										log.Info (String.Format ("post esult: {0}", result));
+										OnData (result);
+									}*
+
+
+						}
+						//}
+						*/
+
+				//}
+
+				/*
 				Xhr.BeginGetResponse (asynchResultResp =>  {
 					try {
 						using (var res = Xhr.EndGetResponse (asynchResultResp)) {
@@ -383,41 +689,9 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 						OnError (ex);
 					}
 				}, null);
+				*/
 			}
-
-            public void Create()
-            {
-                var log = LogManager.GetLogger(Global.CallerName());
-
-                try
-                {
-                    log.Info(string.Format("xhr open {0}: {1}", Method, Uri));
-                    Xhr = (HttpWebRequest) WebRequest.Create(Uri);
-                    Xhr.Method = Method;
-                    if (CookieHeaderValue != null)
-                    {
-						Xhr.Headers["Cookie"] = CookieHeaderValue;
-                        //Xhr.Headers.Add("Cookie", CookieHeaderValue);                        
-                    }
-                }
-                catch (Exception e)
-                {
-                    log.Error(e);
-                    OnError(e);
-                    return;
-                }
-
-
-				if (Method == "POST") {
-					Xhr.ContentType = "application/octet-stream";
-					PostRequest (log);
-				} else {
-					Xhr.ContentType = "text/xml; encoding='utf-8'";
-					GetRequest (log);
-				}
-            }
-
-
+				
             private void OnSuccess()
             {
                 this.Emit(EVENT_SUCCESS);
@@ -434,7 +708,7 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
             private void OnData(byte[] data)
             {
                 var log = LogManager.GetLogger(Global.CallerName());
-				log.Info(String.Format("OnData byte[] ={0}", UTF8Encoding.UTF8.GetString(data,0,data.Length)));
+				log.Info(String.Format("OnData byte[] ={0}", UTF8Encoding.UTF8.GetString(data, 0, data.Length)));
                 this.Emit(EVENT_DATA, data);
                 this.OnSuccess();
             }
@@ -466,5 +740,22 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 
 
     }
+
+	internal delegate void TimerCallback(object state);
+	internal sealed class Timer : CancellationTokenSource, IDisposable
+	{
+		internal Timer(TimerCallback callback, object state, int dueTime)
+		{
+			Task.Delay(dueTime, Token).ContinueWith((t, s) =>
+				{
+					var tuple = (Tuple<TimerCallback, object>)s;
+					tuple.Item1(tuple.Item2);
+				}, Tuple.Create(callback, state), CancellationToken.None,
+				TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion,
+				TaskScheduler.Default);
+		}
+
+		public new void Dispose() { Cancel(); }
+	}
 
 }

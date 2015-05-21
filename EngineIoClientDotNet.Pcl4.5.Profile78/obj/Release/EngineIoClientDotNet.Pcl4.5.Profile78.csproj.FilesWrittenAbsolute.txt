@@ -3,9 +3,14 @@
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/EngineIoClientDotNet.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/obj/Release/EngineIoClientDotNet.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/obj/Release/EngineIoClientDotNet.dll.mdb
-/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/Newtonsoft.Json.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/SuperSocket.ClientEngine.Common.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/SuperSocket.ClientEngine.Core.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/SuperSocket.ClientEngine.Protocol.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/SuperSocket.ClientEngine.Proxy.dll
 /Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/WebSocket4Net.MonoTouch.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/Newtonsoft.Json.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/System.Net.Http.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/System.Net.Http.Primitives.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/System.Net.Http.Extensions.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/ModernHttpClient.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Release/ModernHttpClient.dll.mdb

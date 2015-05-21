@@ -13,6 +13,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <ReleaseVersion>1.0.0</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,9 +35,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\SocketIoClientDotNet\Src\SocketIoClientDotNet.net45\bin\Debug\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="SuperSocket.ClientEngine.Common">
       <HintPath>..\..\Xamarin.Socket.IO\Xamarin.Socket.IO\lib\SuperSocket.ClientEngine.Common.dll</HintPath>
     </Reference>
@@ -51,6 +49,18 @@
     </Reference>
     <Reference Include="WebSocket4Net.MonoTouch">
       <HintPath>..\..\Xamarin.Socket.IO\Xamarin.Socket.IO\lib\WebSocket4Net.MonoTouch.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Google Drive\messenger-app\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>..\..\..\Google Drive\messenger-app\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\Google Drive\messenger-app\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\Google Drive\messenger-app\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +161,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\..\..\Projects\TestSocketIo\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\Projects\TestSocketIo\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\Google Drive\messenger-app\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\Google Drive\messenger-app\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -160,5 +171,11 @@
   -->
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ModernHttpClient\src\ModernHttpClient\ModernHttpClient.Portable.csproj">
+      <Project>{6DD98593-4498-463D-B16E-F6CC5A928B79}</Project>
+      <Name>ModernHttpClient.Portable</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

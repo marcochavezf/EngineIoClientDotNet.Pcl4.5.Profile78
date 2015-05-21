@@ -539,6 +539,7 @@ namespace Quobject.EngineIoClientDotNet.Client
             {
                 PingIntervalTimer.Stop();
             }
+
             var log = LogManager.GetLogger(Global.CallerName());
             log.Info(string.Format("writing ping packet - expecting pong within {0}ms", PingTimeout));
 

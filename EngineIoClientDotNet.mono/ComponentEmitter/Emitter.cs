@@ -31,11 +31,12 @@ namespace Quobject.EngineIoClientDotNet.ComponentEmitter
         /// <returns>a reference to this object.</returns>
         public virtual Emitter Emit(string eventString, params object[] args) 
         {
-            //var log = LogManager.GetLogger(Global.CallerName());
-            //log.Info("Emitter emit event = " + eventString);
+            
             if (this.callbacks.ContainsKey(eventString))
             {
-                ImmutableList<IListener> callbacksLocal = this.callbacks[eventString];                
+				ImmutableList<IListener> callbacksLocal;
+				this.callbacks.TryGetValue(eventString, out callbacksLocal);
+
                 foreach (var fn in callbacksLocal)
                 {
                     fn.Call(args);
@@ -57,7 +58,8 @@ namespace Quobject.EngineIoClientDotNet.ComponentEmitter
                 //this.callbacks[eventString] = ImmutableList<IListener>.Empty;
                 this.callbacks = this.callbacks.Add(eventString, ImmutableList<IListener>.Empty);
             }
-            ImmutableList<IListener> callbacksLocal = this.callbacks[eventString];
+            ImmutableList<IListener> callbacksLocal;
+			this.callbacks.TryGetValue(eventString, out callbacksLocal);
             callbacksLocal = callbacksLocal.Add(fn);
             //this.callbacks[eventString] = callbacksLocal;
             this.callbacks = this.callbacks.Remove(eventString).Add(eventString, callbacksLocal);

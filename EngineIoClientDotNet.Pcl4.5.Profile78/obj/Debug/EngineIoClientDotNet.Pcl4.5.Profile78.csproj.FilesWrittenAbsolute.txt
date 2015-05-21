@@ -1,0 +1,16 @@
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/obj/Debug/.NETPortable,Version=v4.5,Profile=Profile78.AssemblyAttribute.cs
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/EngineIoClientDotNet.dll.mdb
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/EngineIoClientDotNet.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/obj/Debug/EngineIoClientDotNet.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/obj/Debug/EngineIoClientDotNet.dll.mdb
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/SuperSocket.ClientEngine.Common.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/SuperSocket.ClientEngine.Core.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/SuperSocket.ClientEngine.Protocol.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/SuperSocket.ClientEngine.Proxy.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/WebSocket4Net.MonoTouch.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/Newtonsoft.Json.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/System.Net.Http.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/System.Net.Http.Primitives.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/System.Net.Http.Extensions.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/ModernHttpClient.dll
+/Users/marcochavezf/GitHub/EngineIoClientDotNet.Pcl4.5.Profile78/EngineIoClientDotNet.Pcl4.5.Profile78/bin/Debug/ModernHttpClient.dll.mdb

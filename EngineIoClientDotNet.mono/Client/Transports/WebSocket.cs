@@ -109,11 +109,15 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
 
             public void Call(object data)
             {
-                //var log = LogManager.GetLogger(Global.CallerName());
+                var log = LogManager.GetLogger(Global.CallerName());
 
                 if (data is string)
                 {                    
-                    webSocket.ws.Send((string)data);
+					try{
+                    	webSocket.ws.Send((string)data);
+					} catch (Exception e){
+						log.Error (e);
+					}
                 }
                 else if (data is byte[])
                 {
@@ -128,8 +132,11 @@ namespace Quobject.EngineIoClientDotNet.Client.Transports
                     //{
                     //    log.Error(e);
                     //}
-
-                    webSocket.ws.Send(d, 0, d.Length);
+					try{
+                    	webSocket.ws.Send(d, 0, d.Length);
+					} catch (Exception e){
+						log.Error (e);
+					}
                 }
             }
         }

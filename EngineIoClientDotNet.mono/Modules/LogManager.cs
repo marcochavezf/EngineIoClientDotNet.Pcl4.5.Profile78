@@ -12,8 +12,8 @@ namespace Quobject.EngineIoClientDotNet.Modules
 
         //private static System.IO.Stream file;
 
-		public static bool Enabled = false;
-		//public static bool Enabled = true;
+		//public static bool Enabled = false;
+		public static bool Enabled = true;
 
         #region Statics
 
